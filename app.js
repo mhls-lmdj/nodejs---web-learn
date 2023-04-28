@@ -1,13 +1,29 @@
 const express = require('express')
 const app = express()
 const fs = require('fs')
+const expressLayouts = require('express-ejs-layouts')
 const port = 3000
 
+app.set('view engine', 'ejs')
+app.use(expressLayouts)
+
 app.get('/', (req, res) => {
-    res.sendFile('./view/index.html', {root: __dirname})
+    res.render('index', {
+        layout: 'layouts/app',
+        title: 'Home page',
+    })
+})
+app.get('/contact', (req, res) => {
+    res.render('contact', {
+        layout: 'layouts/app',
+        title: 'Contact page',
+    })
 })
 app.get('/register', (req, res) => {
-    res.sendFile('./view/register.html', {root: __dirname})
+    res.render('register', {
+        layout: 'layouts/auth',
+        title: 'Register page',
+    })
 })
 
 app.use('/', (req, res) => {
