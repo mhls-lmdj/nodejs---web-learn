@@ -1,33 +1,20 @@
-const http = require('http')
+const express = require('express')
+const app = express()
 const fs = require('fs')
-const path = require('path')
 const port = 3000
 
-const renderHTML = (path, res) => {
-    fs.readFile(path, (e, data) => {
-        if (e) {
-            res.writeHead(404)
-            res.write('404 - File not found!!')
-        }else{
-            res.write(data);
-        }
-        res.end()
-    })
-}
+app.get('/', (req, res) => {
+    res.sendFile('./view/index.html', {root: __dirname})
+})
+app.get('/register', (req, res) => {
+    res.sendFile('./view/register.html', {root: __dirname})
+})
 
-http.createServer((req, res) => {
-    res.writeHead(200, {
-        'Content-Type': 'text/html'
-    })
-    const url = req.url
-    switch (url) {
-        case '/login':
-            renderHTML('./view/login.html', res)
-            break;
-        default:
-            renderHTML('./view/index.html', res)
-            break;
-    }
-}).listen(port, () => {
-    console.log(`Server is listening on port ${port}..`);
+app.use('/', (req, res) => {
+    res.status(404)
+    console.log('404');
+})
+
+app.listen(port, () => {
+    console.log(`Server is listening on http://localhost:${port}`);
 })
